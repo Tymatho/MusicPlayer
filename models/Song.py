@@ -1,5 +1,7 @@
+from enum import Enum
+
 class Song:
-    def __init__(self, path, title, enable=True):
+    def __init__(self, path: str, title: str, enable: bool = True):
         self.path = path
         self.title = title
         self.enable = enable
@@ -11,3 +13,8 @@ class Song:
     def get_enable(self): return self.enable
 
     def set_enable(self, enable): self.enable = enable
+    
+class SongColumns(Enum):
+    PATH = 1
+    TITLE = 2
+    ENABLE = 3

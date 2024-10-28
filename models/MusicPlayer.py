@@ -42,7 +42,7 @@ class MusicPlayer:
                     continue
             self.main_view.update_song_table()
 
-    def load_music(self, song):
+    def load_music(self, song: Song):
         mixer.music.load(song.get_path())
         self.root.title(f"Music Player - {song.get_title()}")
 
@@ -116,7 +116,7 @@ class MusicPlayer:
                 self.play_next_music()
         self.root.after(500, self.check_music_end)
 
-    def set_paused_state(self, new_state): self.paused = new_state
+    def set_paused_state(self, new_state: bool): self.paused = new_state
         
     def get_mp3_files(self): return self.mp3_files
     

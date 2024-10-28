@@ -1,8 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
+from typing import List
 
 # Spécifie qu'on importe un énum
-from helpers.constants import SongColumns
+from models.Song import SongColumns
 from views.GraphicalManager import GraphicalManager
 
 class MainController:
@@ -33,7 +33,7 @@ class MainController:
             item = self.tree.selection()[0]
             self.toggle_enable(item)
 
-    def toggle_enable(self, item):
+    def toggle_enable(self, item: str):
         song_index = self.tree.index(item)
         if song_index != self.music_player.get_current_song_index():
             song = self.music_player.get_mp3_files()[song_index]
@@ -51,7 +51,7 @@ class MainController:
             self.tree.insert("", tk.END, values=(song.get_title(), song.get_path(), song.get_enable()))
         self.highlight_current_song()
 
-    def set_button_state(self, buttons, state):
+    def set_button_state(self, buttons: List[tk.Button], state):
         for button in buttons:
             button.config(state=state)
 
@@ -67,18 +67,18 @@ class MainController:
         else:
             self.set_button_state([self.music_buttons["next_button"], self.music_buttons["previous_button"], self.music_buttons["play_this_button"]], tk.DISABLED)
 
-    def sort_column(self, col):
-        reverse = self.sort_direction.get(col, False)
-        if self.last_sorted_column == col and self.last_sort_reverse == reverse:
+    def sort_column(self, col_name: str):
+        reverse = self.sort_direction.get(col_name, False)
+        if self.last_sorted_column == col_name and self.last_sort_reverse == reverse:
             return
         self.music_player.get_mp3_files().sort(
-            key=lambda song: getattr(song, f"get_{col.lower()}")(),
+            key=lambda song: getattr(song, f"get_{col_name.lower()}")(),
             reverse=reverse
         )
         self.update_song_table()
-        self.last_sorted_column = col
+        self.last_sorted_column = col_name
         self.last_sort_reverse = reverse
-        self.sort_direction[col] = not reverse
+        self.sort_direction[col_name] = not reverse
         self.music_player.reset_current_song_index()
 
     def highlight_current_song(self):

@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from controller import MainController
 
 class GraphicalManager:
-    def __init__(self, root, controller):
+    def __init__(self, root, controller: MainController):
         self.root = root
         self.controller = controller
         self.style = ttk.Style(root)
@@ -24,7 +25,7 @@ class GraphicalManager:
             "play_this_button": self.create_button(toolbar, "Play This Music", self.controller.music_player.play_this_music, state=tk.DISABLED)
         }
 
-    def create_button(self, parent, text, command, state=tk.NORMAL):
+    def create_button(self, parent, text: str, command, state=tk.NORMAL):
         button = tk.Button(parent, text=text, command=command, state=state)
         button.pack(side=tk.LEFT, padx=5)
         return button
