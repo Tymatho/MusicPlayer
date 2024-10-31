@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from controller import MainController
+from models.Song import SongColumns
 
 class GraphicalManager:
     def __init__(self, root, controller: MainController):
@@ -31,14 +32,10 @@ class GraphicalManager:
         return button
 
     def create_song_table(self):
-        self.tree = ttk.Treeview(self.root, columns=("Title", "Path", "Enable"), show="headings", height=5)
-        self.tree.heading("Title", text="Title", command=lambda: self.controller.sort_column("Title"))
-        self.tree.heading("Path", text="Path", command=lambda: self.controller.sort_column("Path"))
-        self.tree.heading("Enable", text="Enable", command=lambda: self.controller.sort_column("Enable"))
-
-        self.tree.column("Title", width=150, stretch=True)
-        self.tree.column("Path", width=300, stretch=True)
-        self.tree.column("Enable", width=50, stretch=True)
+        self.tree = ttk.Treeview(self.root, columns=(SongColumns.TITLE.name, SongColumns.PATH.name, SongColumns.ENABLE.name), show="headings", height=5)
+        for column in SongColumns:
+            self.tree.heading(column.name, text=column.name, command=lambda: self.controller.sort_column(column.name))
+            self.tree.column(column.name, width=column.width, stretch=column.width)
 
         scrollbar = ttk.Scrollbar(self.root, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=scrollbar.set)

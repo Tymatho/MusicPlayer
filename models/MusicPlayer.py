@@ -107,8 +107,9 @@ class MusicPlayer:
         selected_item = self.main_view.get_tree().selection()
         if selected_item:
             song_index = self.main_view.get_tree().index(selected_item[0])
-            self.current_song_index = song_index
-            self.play_music()
+            if self.current_song_index != song_index:
+                self.current_song_index = song_index
+                self.play_music()
     
     def check_music_end(self):
         if self.mp3_files:
