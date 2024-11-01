@@ -15,7 +15,6 @@ class MainController:
 
         self.init_window()
 
-        # Initialize GraphicalManager
         self.graphics = GraphicalManager(root, self)
         self.tree = self.graphics.get_tree()
         self.music_buttons = self.graphics.get_buttons()
