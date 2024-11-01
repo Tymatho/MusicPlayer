@@ -47,7 +47,6 @@ class MusicPlayer:
         self.root.title(f"Music Player - {song.get_title()}")
 
     def load_multiple_music(self):
-        self.music_files_set.clear()
         self.current_folder = filedialog.askdirectory()
         if self.current_folder:
             self.fill_music_folder()
@@ -56,12 +55,13 @@ class MusicPlayer:
             self.play_music()
 
     def load_one_music(self):
-        self.music_files_set.clear()
         temp_song = filedialog.askopenfilename(filetypes=[("Music Files", "*.mp3 *.wav")])
         if temp_song:
+            self.music_files_set.clear()
             self.mp3_files = [Song(temp_song, os.path.basename(temp_song), True)]
             self.reset_current_song_index()
             self.is_multi_music_played = False
+            self.music_files_set.add(os.path.basename(temp_song))
             self.main_view.update_song_table()
             self.play_music()
 

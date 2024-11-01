@@ -15,8 +15,8 @@ class Song:
     def set_enable(self, enable): self.enable = enable
     
 class SongColumns(Enum):
-    PATH = (1, "Path", 300, True)
     TITLE = (2, "Title", 150, True)
+    PATH = (1, "Path", 300, True)
     ENABLE = (3, "Enable", 50, True)
 
     @property

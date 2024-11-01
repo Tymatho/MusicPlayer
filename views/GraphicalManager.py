@@ -27,15 +27,18 @@ class GraphicalManager:
         return button
 
     def create_song_table(self):
-        self.tree = ttk.Treeview(self.root, columns=(SongColumns.TITLE.name, SongColumns.PATH.name, SongColumns.ENABLE.name), show="headings", height=5)
+        frame = ttk.Frame(self.root)
+        frame.pack(pady=20, fill=tk.BOTH, expand=True)
+        self.tree = ttk.Treeview(frame, columns=(SongColumns.TITLE.name, SongColumns.PATH.name, SongColumns.ENABLE.name), show="headings", height=5)
         for column in SongColumns:
-            self.tree.heading(column.name, text=column.name, command=lambda: self.controller.sort_column(column.name))
+            #command=lambda name=column.name -> store the value to apply it to EACH iteration and not with the last value of the iteration
+            self.tree.heading(column.name, text=column.name, command=lambda name=column.name: self.controller.sort_column(name))
             self.tree.column(column.name, width=column.width, stretch=column.width)
 
-        scrollbar = ttk.Scrollbar(self.root, orient="vertical", command=self.tree.yview)
+        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=scrollbar.set)
 
-        self.tree.pack(pady=20, fill=tk.BOTH, expand=True)
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.tree.bind("<Control-a>", self.controller.select_all_items)
