@@ -121,9 +121,9 @@ class MusicPlayer:
         
     def get_mp3_files(self): return self.mp3_files
     
-    def get_paused_state(self): return self.paused
+    def is_paused(self): return self.paused
     
-    def get_is_multi_music_played(self): return self.is_multi_music_played
+    def is_multi_music_played(self): return self.is_multi_music_played
     
     def reset_current_song_index(self): self.current_song_index = 0
         
