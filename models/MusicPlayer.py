@@ -72,25 +72,27 @@ class MusicPlayer:
             self.set_paused_state(False)
             self.main_view.update_buttons()
             self.main_view.highlight_current_song()
+        
+    def get_valid_song_index(self, index, step):
+        new_index = (index + step) % len(self.mp3_files)
+        if len(self.mp3_files) == 0:
+            return -1
+        while not self.mp3_files[new_index].get_enable():
+            new_index = (new_index + step) % len(self.mp3_files)
+            if new_index == index:
+                break
+        return new_index
 
     def play_next_music(self):
         if not self.mp3_files:
             return
-        self.current_song_index = (self.current_song_index + 1) % len(self.mp3_files)
-        while not self.mp3_files[self.current_song_index].get_enable():
-            self.current_song_index = (self.current_song_index + 1) % len(self.mp3_files)
-            if self.current_song_index == 0:
-                break
+        self.current_song_index = self.get_valid_song_index(self.current_song_index, 1)
         self.play_music()
 
     def play_previous_music(self):
         if not self.mp3_files:
             return
-        self.current_song_index = (self.current_song_index - 1) % len(self.mp3_files)
-        while not self.mp3_files[self.current_song_index].get_enable():
-            self.current_song_index = (self.current_song_index - 1) % len(self.mp3_files)
-            if self.current_song_index == len(self.mp3_files) - 1:
-                break
+        self.current_song_index = self.get_valid_song_index(self.current_song_index, -1)
         self.play_music()
 
     def pause_music(self):
