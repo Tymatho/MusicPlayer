@@ -103,7 +103,7 @@ class MainController:
     
     def bind_treeview_enable(self, event):
         column = self.graphics.get_tree().identify_column(event.x)
-        if column == f"#{SongColumns.ENABLE.id}" and self.music_player.get_is_multi_music_played():
+        if column == f"#{SongColumns.ENABLE.id}" and self.music_player.get_is_multi_music_played() and self.graphics.get_tree().selection():
             item = self.graphics.get_tree().selection()[0]
             self.toggle_enable(item)
 
