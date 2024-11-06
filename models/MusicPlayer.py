@@ -66,7 +66,7 @@ class MusicPlayer:
             self.play_music()
 
     def load_one_music(self):
-        temp_song = filedialog.askopenfilename(filetypes=[("Music Files", "*.mp3 *.wav")])
+        temp_song = filedialog.askopenfilename(filetypes=[("Music Files", "*.mp3")])
         if temp_song:
             self.music_files_set.clear()
             self.mp3_files = [Song(temp_song, os.path.basename(temp_song), MP3(temp_song).info.length, True)]
