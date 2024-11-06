@@ -69,7 +69,7 @@ class MusicPlayer:
         temp_song = filedialog.askopenfilename(filetypes=[("Music Files", "*.mp3 *.wav")])
         if temp_song:
             self.music_files_set.clear()
-            self.mp3_files = [Song(temp_song, os.path.basename(temp_song), True)]
+            self.mp3_files = [Song(temp_song, os.path.basename(temp_song), MP3(temp_song).info.length, True)]
             self.reset_current_song_index()
             self.is_multi_music_played = False
             self.music_files_set.add(os.path.basename(temp_song))
