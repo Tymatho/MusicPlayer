@@ -5,30 +5,32 @@ from typing import List
 from models.Song import SongColumns
 from views.GraphicalManager import GraphicalManager
 from views.graphical_components.buttons import MediaPlayerButtons
+from models import MusicPlayer
 
 class MainController:
-    def __init__(self, root, music_player):
+    def __init__(self, root, music_player: MusicPlayer):
         self.root = root
         self.music_player = music_player
         self.sort_direction = {}
         self.last_sorted_column = None
         self.last_sort_reverse = False
-
-        self.init_window()
-
         self.graphics = GraphicalManager(root, self)
         self.update_song_table()
-
-    def init_window(self):
-        self.root.title("Music Player")
-        self.root.geometry("600x400")
 
     def update_song_table(self):
         for item in self.graphics.get_tree().get_children():
             self.graphics.get_tree().delete(item)
         for song in self.music_player.get_mp3_files():
-            self.graphics.get_tree().insert("", tk.END, values=(song.get_title(), song.get_path(), song.get_enable()))
+            self.graphics.get_tree().insert("", tk.END, values=(song.get_title(), song.get_path(), self.format_duration(song.get_duration()), song.get_enable()))
         self.highlight_current_song()
+
+    def format_duration(self, duration):
+        minutes, seconds = divmod(duration, 60)
+        return f"{int(minutes)}:{int(seconds):02d}"
+    
+    def update_statements_label(self):
+        self.graphics.statements_label["volume_label"].config(text=f"Volume: {self.music_player.get_volume() * 100}%")
+        self.graphics.statements_label["current_song_label"].config(text=f"Song: {self.music_player.get_current_song_index() + 1}/{len(self.music_player.get_mp3_files())}")
 
     def set_button_state(self, buttons: List[tk.Button], state):
         for button in buttons:

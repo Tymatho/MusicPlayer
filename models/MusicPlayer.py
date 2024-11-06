@@ -6,11 +6,13 @@ from controller.MainController import MainController
 #Spécifie qu'on importe un module
 from tkinter import filedialog
 from pygame import mixer
+from mutagen.mp3 import MP3
 
 class MusicPlayer:
     def __init__(self, root):
         self.root = root
         mixer.init()
+        mixer.music.set_volume(0.5)
 
         self.current_folder = None
         self.current_song_index = -1
@@ -20,10 +22,10 @@ class MusicPlayer:
         self.is_multi_music_played = False
         self.paused = False
         
-        self.main_view = MainController(root, self)
+        self.main_controller = MainController(root, self)
         self.root.after(500, self.check_music_end)
 
-    def fill_music_folder(self):
+    def fill_music_folders(self):
         if self.current_folder:
             stack = [self.current_folder]
             #tant que la pile n'est pas vide alors on continue de boucler dessus
@@ -36,11 +38,21 @@ class MusicPlayer:
                             stack.append(full_path)
                         elif file.endswith(".mp3"):
                             if file not in self.music_files_set:
-                                self.mp3_files.append(Song(full_path, file))
+                                self.mp3_files.append(Song(full_path, file, MP3(full_path).info.length))
                                 self.music_files_set.add(file)
                 except PermissionError:
                     continue
-            self.main_view.update_song_table()
+            self.main_controller.update_song_table()
+        
+    def fill_music_folder(self):
+        if self.current_folder:
+            for file in os.listdir(self.current_folder):
+                full_path = os.path.join(self.current_folder, file)
+                if file.endswith(".mp3"):
+                    if file not in self.music_files_set:
+                        self.mp3_files.append(Song(full_path, file, MP3(full_path).info.length))
+                        self.music_files_set.add(file)
+            self.main_controller.update_song_table()
 
     def load_music(self, song: Song):
         mixer.music.load(song.get_path())
@@ -62,7 +74,7 @@ class MusicPlayer:
             self.reset_current_song_index()
             self.is_multi_music_played = False
             self.music_files_set.add(os.path.basename(temp_song))
-            self.main_view.update_song_table()
+            self.main_controller.update_song_table()
             self.play_music()
 
     def play_music(self):
@@ -70,8 +82,9 @@ class MusicPlayer:
             self.load_music(self.mp3_files[self.current_song_index])
             mixer.music.play()
             self.set_paused_state(False)
-            self.main_view.update_buttons()
-            self.main_view.highlight_current_song()
+            self.main_controller.update_buttons()
+            self.main_controller.highlight_current_song()
+            self.main_controller.update_statements_label()
         
     def get_valid_song_index(self, index, step):
         new_index = (index + step) % len(self.mp3_files)
@@ -98,20 +111,26 @@ class MusicPlayer:
     def pause_music(self):
         mixer.music.pause()
         self.set_paused_state(True)
-        self.main_view.update_buttons()
+        self.main_controller.update_buttons()
 
     def resume_music(self):
         mixer.music.unpause()
         self.set_paused_state(False)
-        self.main_view.update_buttons()
+        self.main_controller.update_buttons()
 
     def play_this_music(self):
-        selected_item = self.main_view.get_tree().selection()
+        selected_item = self.main_controller.get_tree().selection()
         if selected_item:
-            song_index = self.main_view.get_tree().index(selected_item[0])
+            song_index = self.main_controller.get_tree().index(selected_item[0])
             if self.current_song_index != song_index:
                 self.current_song_index = song_index
                 self.play_music()
+                
+    def update_volume(self, volume: float):
+        if self.mp3_files:
+            new_volume = (max(0.0, min(1.0, mixer.music.get_volume() + volume))) #get safe value for volume
+            mixer.music.set_volume(new_volume)
+            self.main_controller.update_statements_label()
     
     def check_music_end(self):
         if self.mp3_files:
@@ -130,3 +149,6 @@ class MusicPlayer:
     def reset_current_song_index(self): self.current_song_index = 0
         
     def get_current_song_index(self): return self.current_song_index
+    
+    def get_volume(self):
+        return mixer.music.get_volume()

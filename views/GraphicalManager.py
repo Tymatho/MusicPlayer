@@ -7,12 +7,18 @@ from .graphical_components.buttons import MediaPlayerButtons
 class GraphicalManager:
     def __init__(self, root, controller: MainController):
         self.root = root
+        self.init_window()
         self.controller = controller
         self.style = ttk.Style(root)
         self.style.theme_use("clam")
         self.create_buttons()
         self.create_song_table()
         self.create_contextual_menu()
+        self.create_statements()
+    
+    def init_window(self):
+        self.root.title("Music Player")
+        self.root.geometry("800x400")
 
     def create_buttons(self):
         toolbar = tk.Frame(self.root)
@@ -29,7 +35,10 @@ class GraphicalManager:
     def create_song_table(self):
         frame = ttk.Frame(self.root)
         frame.pack(pady=20, fill=tk.BOTH, expand=True)
-        self.tree = ttk.Treeview(frame, columns=(SongColumns.TITLE.name, SongColumns.PATH.name, SongColumns.ENABLE.name), show="headings", height=5)
+        song_columns=[]
+        for column in SongColumns:
+            song_columns.append(column.name)
+        self.tree = ttk.Treeview(frame, columns=song_columns, show="headings", height=5)
         for column in SongColumns:
             #command=lambda name=column.name -> store the value to apply it to EACH iteration and not with the last value of the iteration
             self.tree.heading(column.name, text=column.name, command=lambda name=column.name: self.controller.sort_column(name))
@@ -48,6 +57,21 @@ class GraphicalManager:
     def create_contextual_menu(self):
         self.context_menu = tk.Menu(self.root, tearoff=0)
         self.context_menu.add_command(label="Toggle Enable", command=self.controller.toggle_enable_contextual_menu)
+    
+    def create_statements(self):
+        self.bottom_toolbar = tk.Frame(self.root)
+        self.bottom_toolbar.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
+        
+        self.statements_label = {}
+        
+        volume_label = tk.Label(self.root, text=f"Volume: {self.controller.music_player.get_volume() * 100}%", font=("Helvetica", 12))
+        volume_label.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)
+        
+        current_song_label = tk.Label(self.root, text=f"Song: 0/0", font=("Helvetica", 12))
+        current_song_label.place(relx=0.0, rely=1.0, anchor="sw", x=10, y=-10)
+        
+        self.statements_label["volume_label"] = volume_label
+        self.statements_label["current_song_label"] = current_song_label
 
     def get_tree(self):
         return self.tree
