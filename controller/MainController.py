@@ -5,6 +5,7 @@ from typing import List
 from models.Song import SongColumns
 from views.GraphicalManager import GraphicalManager
 from views.graphical_components.buttons import MediaPlayerButtons
+from views.graphical_components.labels import MediaPlayerLabels
 from models import MusicPlayer
 
 class MainController:
@@ -29,32 +30,46 @@ class MainController:
         return f"{int(minutes)}:{int(seconds):02d}"
     
     def update_statements_label(self):
-        self.graphics.statements_label["volume_label"].config(text=f"Volume: {self.music_player.get_volume() * 100}%")
-        self.graphics.statements_label["current_song_label"].config(text=f"Song: {self.music_player.get_current_song_index() + 1}/{len(self.music_player.get_mp3_files())}")
+        self.graphics.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].config(text=f"Volume: {self.music_player.get_volume() * 100}%")
+        self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].config(text=f"Song: {self.music_player.get_current_song_index() + 1}/{len(self.music_player.get_mp3_files())}")
 
     def set_button_state(self, buttons: List[tk.Button], state):
         for button in buttons:
             button.config(state=state)
 
     def update_buttons(self):
+        buttons = self.graphics.get_buttons()
+        
+        def set_buttons_state(buttons_to_update, state):
+            self.set_button_state([buttons[button.variable_name] for button in buttons_to_update], state)
+
         if self.music_player.get_paused_state():
-            self.set_button_state([self.graphics.get_buttons()[MediaPlayerButtons.PAUSE_BUTTON.variable_name]], tk.DISABLED)
-            self.set_button_state([self.graphics.get_buttons()[MediaPlayerButtons.RESUME_BUTTON.variable_name]], tk.NORMAL)
+            set_buttons_state(
+                [MediaPlayerButtons.PAUSE_BUTTON, MediaPlayerButtons.INCREASE_VOLUME_BUTTON, 
+                MediaPlayerButtons.DECREASE_VOLUME_BUTTON],
+                tk.DISABLED
+            )
+            set_buttons_state([MediaPlayerButtons.RESUME_BUTTON], tk.NORMAL)
         else:
-            self.set_button_state([self.graphics.get_buttons()[MediaPlayerButtons.PAUSE_BUTTON.variable_name]], tk.NORMAL)
-            self.set_button_state([self.graphics.get_buttons()[MediaPlayerButtons.RESUME_BUTTON.variable_name]], tk.DISABLED)
+            set_buttons_state([MediaPlayerButtons.RESUME_BUTTON], tk.DISABLED)
+            set_buttons_state(
+                [MediaPlayerButtons.PAUSE_BUTTON, MediaPlayerButtons.INCREASE_VOLUME_BUTTON, 
+                MediaPlayerButtons.DECREASE_VOLUME_BUTTON],
+                tk.NORMAL
+            )
+
         if self.music_player.get_is_multi_music_played():
-            self.set_button_state(
-                [self.graphics.get_buttons()[MediaPlayerButtons.NEXT_BUTTON.variable_name],
-                 self.graphics.get_buttons()[MediaPlayerButtons.PREVIOUS_BUTTON.variable_name],
-                 self.graphics.get_buttons()[MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON.variable_name]]
-                , tk.NORMAL)
+            set_buttons_state(
+                [MediaPlayerButtons.NEXT_BUTTON, MediaPlayerButtons.PREVIOUS_BUTTON,
+                MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON],
+                tk.NORMAL
+            )
         else:
-            self.set_button_state(
-                [self.graphics.get_buttons()[MediaPlayerButtons.NEXT_BUTTON.variable_name], 
-                self.graphics.get_buttons()[MediaPlayerButtons.PREVIOUS_BUTTON.variable_name], 
-                self.graphics.get_buttons()[MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON.variable_name]]
-                , tk.DISABLED)
+            set_buttons_state(
+                [MediaPlayerButtons.NEXT_BUTTON, MediaPlayerButtons.PREVIOUS_BUTTON, 
+                MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON],
+                tk.DISABLED
+            )
 
     def sort_column(self, col_name: str):
         reverse = self.sort_direction.get(col_name, False)
@@ -85,7 +100,7 @@ class MainController:
         if song_index != self.music_player.get_current_song_index():
             song = self.music_player.get_mp3_files()[song_index]
             song.set_enable(not song.get_enable())
-            self.graphics.get_tree().item(item, values=(song.get_title(), song.get_path(), song.get_enable()))
+            self.graphics.get_tree().item(item, values=(song.get_title(), song.get_path(),  self.format_duration(song.get_duration()), song.get_enable()))
         
     def toggle_enable_contextual_menu(self):
         for item in self.graphics.get_tree().selection():
@@ -109,5 +124,4 @@ class MainController:
             item = self.graphics.get_tree().selection()[0]
             self.toggle_enable(item)
 
-    def get_tree(self):
-        return self.graphics.get_tree()
+    def get_tree(self): return self.graphics.get_tree()

@@ -3,6 +3,7 @@ from tkinter import ttk
 from controller import MainController
 from models.Song import SongColumns
 from .graphical_components.buttons import MediaPlayerButtons
+from .graphical_components.labels import MediaPlayerLabels
 
 class GraphicalManager:
     def __init__(self, root, controller: MainController):
@@ -23,10 +24,9 @@ class GraphicalManager:
     def create_buttons(self):
         toolbar = tk.Frame(self.root)
         toolbar.pack(side=tk.TOP, fill=tk.X, pady=10)
-        self.buttons = {}
-        for button in MediaPlayerButtons:
-            self.buttons[button.variable_name] = self.create_button(toolbar, button.title, button.command(self.controller.music_player), button.is_enable)
-        
+        self.buttons = {button.variable_name: self.create_button(toolbar, button.title, button.command(self.controller.music_player), button.is_enable) 
+                for button in MediaPlayerButtons}
+
     def create_button(self, parent, text: str, command, state=tk.NORMAL):
         button = tk.Button(parent, text=text, command=command, state=state)
         button.pack(side=tk.LEFT, padx=5)
@@ -35,9 +35,7 @@ class GraphicalManager:
     def create_song_table(self):
         frame = ttk.Frame(self.root)
         frame.pack(pady=20, fill=tk.BOTH, expand=True)
-        song_columns=[]
-        for column in SongColumns:
-            song_columns.append(column.name)
+        song_columns=[column.name for column in SongColumns]
         self.tree = ttk.Treeview(frame, columns=song_columns, show="headings", height=5)
         for column in SongColumns:
             #command=lambda name=column.name -> store the value to apply it to EACH iteration and not with the last value of the iteration
@@ -50,6 +48,7 @@ class GraphicalManager:
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
+        ##HAVE TO REFACTOR THIS
         self.tree.bind("<Control-a>", self.controller.select_all_items)
         self.tree.bind("<Double-1>", self.controller.bind_treeview_enable)
         self.tree.bind("<Button-3>", self.controller.show_contextual_menu)
@@ -62,22 +61,17 @@ class GraphicalManager:
         self.bottom_toolbar = tk.Frame(self.root)
         self.bottom_toolbar.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
         
-        self.statements_label = {}
-        
-        volume_label = tk.Label(self.root, text=f"Volume: {self.controller.music_player.get_volume() * 100}%", font=("Helvetica", 12))
-        volume_label.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)
-        
-        current_song_label = tk.Label(self.root, text=f"Song: 0/0", font=("Helvetica", 12))
-        current_song_label.place(relx=0.0, rely=1.0, anchor="sw", x=10, y=-10)
-        
-        self.statements_label["volume_label"] = volume_label
-        self.statements_label["current_song_label"] = current_song_label
+        self.statements_label = {label.variable_name: self.create_label(self.root, label.default_text, label.font) for label in MediaPlayerLabels}
+        self.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)
+        self.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].place(relx=0.0, rely=1.0, anchor="sw", x=10, y=-10)
 
-    def get_tree(self):
-        return self.tree
+    def create_label(self, parent, text, font):
+        label = tk.Label(parent, text=text, font=font)
+        label.pack(side=tk.LEFT, padx=5)
+        return label
 
-    def get_buttons(self):
-        return self.buttons
+    def get_tree(self): return self.tree
 
-    def get_context_menu(self):
-        return self.context_menu
+    def get_buttons(self): return self.buttons
+
+    def get_context_menu(self): return self.context_menu

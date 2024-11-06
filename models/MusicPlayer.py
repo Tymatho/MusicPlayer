@@ -127,7 +127,7 @@ class MusicPlayer:
                 
     def update_volume(self, volume: float):
         if self.mp3_files:
-            new_volume = (max(0.0, min(1.0, mixer.music.get_volume() + volume))) #get safe value for volume
+            new_volume = max(0.0, min(1.0, mixer.music.get_volume() + volume)) #get safe value for volume
             mixer.music.set_volume(new_volume)
             self.main_controller.update_statements_label()
     
@@ -149,5 +149,4 @@ class MusicPlayer:
         
     def get_current_song_index(self): return self.current_song_index
     
-    def get_volume(self):
-        return mixer.music.get_volume()
+    def get_volume(self): return mixer.music.get_volume()
