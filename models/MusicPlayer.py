@@ -1,4 +1,3 @@
-import tkinter as tk
 import os
 #Spécifie qu'on importe une classe
 from models.Song import Song
