@@ -55,7 +55,7 @@ class MusicPlayer:
 
     def load_music(self, song: Song):
         mixer.music.load(song.get_path())
-        self.root.title(f"Music Player - {song.get_title()}")
+        self.main_controller.graphics.update_window_title(song.get_title())
 
     def load_multiple_music(self):
         self.current_folder = filedialog.askdirectory()
@@ -86,9 +86,9 @@ class MusicPlayer:
             self.main_controller.update_statements_label()
         
     def get_valid_song_index(self, index, step):
-        new_index = (index + step) % len(self.mp3_files)
         if len(self.mp3_files) == 0:
             return -1
+        new_index = (index + step) % len(self.mp3_files)
         while not self.mp3_files[new_index].get_enable():
             new_index = (new_index + step) % len(self.mp3_files)
             if new_index == index:
@@ -96,16 +96,14 @@ class MusicPlayer:
         return new_index
 
     def play_next_music(self):
-        if not self.mp3_files:
-            return
-        self.current_song_index = self.get_valid_song_index(self.current_song_index, 1)
-        self.play_music()
+        if self.mp3_files:
+            self.current_song_index = self.get_valid_song_index(self.current_song_index, 1)
+            self.play_music()
 
     def play_previous_music(self):
-        if not self.mp3_files:
-            return
-        self.current_song_index = self.get_valid_song_index(self.current_song_index, -1)
-        self.play_music()
+        if self.mp3_files:
+            self.current_song_index = self.get_valid_song_index(self.current_song_index, -1)
+            self.play_music()
 
     def pause_music(self):
         mixer.music.pause()
@@ -120,9 +118,9 @@ class MusicPlayer:
     def play_this_music(self):
         selected_item = self.main_controller.get_tree().selection()
         if selected_item:
-            song_index = self.main_controller.get_tree().index(selected_item[0])
-            if self.current_song_index != song_index:
-                self.current_song_index = song_index
+            tree_index = self.main_controller.get_tree().index(selected_item[0])
+            if self.current_song_index != tree_index:
+                self.current_song_index = tree_index
                 self.play_music()
                 
     def update_volume(self, volume: float):

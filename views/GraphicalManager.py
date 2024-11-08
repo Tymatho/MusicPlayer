@@ -70,6 +70,9 @@ class GraphicalManager:
         label.pack(side=tk.LEFT, padx=5)
         return label
 
+    def update_window_title(self, song_title: str):
+        self.root.title(f"Music Player - {song_title}")
+
     def get_tree(self): return self.tree
 
     def get_buttons(self): return self.buttons
