@@ -1,7 +1,7 @@
 from models.MusicPlayer import MusicPlayer
-import tkinter as tk
+from ttkthemes import ThemedTk
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ThemedTk()
     app = MusicPlayer(root)
     root.mainloop()
