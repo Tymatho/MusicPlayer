@@ -1,2 +1,5 @@
 # Ignorer tous les dossiers __pycache__
 __pycache__/
+build
+dist
+main.spec

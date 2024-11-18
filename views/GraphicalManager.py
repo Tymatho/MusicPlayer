@@ -20,6 +20,7 @@ class GraphicalManager:
     def init_window(self):
         self.root.title("Music Player")
         self.root.geometry("800x400")
+        self.root.iconbitmap("./music_player.ico")
 
     def create_buttons(self):
         toolbar = tk.Frame(self.root)
