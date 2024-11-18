@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from controller import MainController
 from models.Song import SongColumns
+from controller.binds import AppBinds
 from .graphical_components.buttons import MediaPlayerButtons
 from .graphical_components.labels import MediaPlayerLabels
 
@@ -47,11 +48,13 @@ class GraphicalManager:
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        ##HAVE TO REFACTOR THIS
-        self.tree.bind("<Control-a>", self.controller.select_all_items)
-        self.tree.bind("<Double-1>", self.controller.bind_treeview_enable)
-        self.tree.bind("<Button-3>", self.controller.show_contextual_menu)
-
+        for binding in AppBinds:
+            match binding.parent:
+                case "treeview":
+                    self.tree.bind(binding.control, binding.command(self.controller))
+                case "root":
+                    self.root.bind(binding.control, binding.command(self.controller))
+        
     def create_contextual_menu(self):
         self.context_menu = tk.Menu(self.root, tearoff=0)
         self.context_menu.add_command(label="Toggle Enable", command=self.controller.toggle_enable_contextual_menu)

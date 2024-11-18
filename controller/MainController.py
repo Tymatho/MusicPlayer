@@ -124,4 +124,10 @@ class MainController:
             item = self.graphics.get_tree().selection()[0]
             self.toggle_enable(item)
 
+    def update_volume(self, event, volume: float):
+        self.music_player.update_volume(volume)
+        
+    def play_this_music(self, event):
+        self.music_player.play_this_music()
+
     def get_tree(self): return self.graphics.get_tree()

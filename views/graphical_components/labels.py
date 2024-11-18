@@ -1,5 +1,4 @@
 from enum import Enum
-import tkinter as tk
 
 GENERAL_FONT=("Helvetica", 12)
 
