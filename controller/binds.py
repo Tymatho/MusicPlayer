@@ -8,6 +8,8 @@ class AppBinds(Enum):
     
     DECREASE_VOLUME = ("root", "-", "update_volume", -0.1)
     INCREASE_VOLUME = ("root", "+", "update_volume", 0.1)
+    OPEN_FOLDER = ("root", "<Control-o>", "load_multiple_music")
+    OPEN_FILE = ("root", "<Control-Alt-o>", "load_one_music")
 
     @property
     def parent(self):

@@ -45,16 +45,14 @@ class MainController:
 
         if self.music_player.get_paused_state():
             set_buttons_state(
-                [MediaPlayerButtons.PAUSE_BUTTON, MediaPlayerButtons.INCREASE_VOLUME_BUTTON, 
-                MediaPlayerButtons.DECREASE_VOLUME_BUTTON],
+                [MediaPlayerButtons.PAUSE_BUTTON],
                 tk.DISABLED
             )
             set_buttons_state([MediaPlayerButtons.RESUME_BUTTON], tk.NORMAL)
         else:
             set_buttons_state([MediaPlayerButtons.RESUME_BUTTON], tk.DISABLED)
             set_buttons_state(
-                [MediaPlayerButtons.PAUSE_BUTTON, MediaPlayerButtons.INCREASE_VOLUME_BUTTON, 
-                MediaPlayerButtons.DECREASE_VOLUME_BUTTON],
+                [MediaPlayerButtons.PAUSE_BUTTON],
                 tk.NORMAL
             )
 
@@ -129,5 +127,11 @@ class MainController:
         
     def play_this_music(self, event):
         self.music_player.play_this_music()
-
+        
+    def load_multiple_music(self, event):
+        self.music_player.load_multiple_music()
+        
+    def load_one_music(self, event):
+        self.music_player.load_one_music()
+        
     def get_tree(self): return self.graphics.get_tree()
