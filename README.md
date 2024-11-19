@@ -7,6 +7,7 @@ You have to install these packages from pip :
 * pip install pygame
 * pip install mutagen
 * pip install ttkthemes
+* pip install polib
 
 ## Generate application
 

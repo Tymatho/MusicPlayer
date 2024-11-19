@@ -1,3 +1,8 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr\n"
+
 msgid "Select Folder to Play"
 msgstr "Sélectionner un dossier"
 
@@ -24,3 +29,21 @@ msgstr "Augmenter le volume"
 
 msgid "Decrease Volume"
 msgstr "Diminuer le volume"
+
+msgid "Song: {current}/{total}"
+msgstr "Musique : {current}/{total}"
+
+msgid "Volume: {volume}%"
+msgstr "Volume : {volume}%"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Path"
+msgstr "Chemin"
+
+msgid "Duration"
+msgstr "Durée"
+
+msgid "Enable"
+msgstr "Disponible"

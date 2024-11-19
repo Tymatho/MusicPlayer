@@ -1,17 +1,18 @@
 from enum import Enum
+from translator import _
 
 GENERAL_FONT=("Helvetica", 12)
 
 class MediaPlayerLabels(Enum):
-    CURRENT_SONG_LABEL = ("current_song_label", f"Song: 0/0", GENERAL_FONT)
-    VOLUME_LABEL = ("volume_label", f"Volume: 50%", GENERAL_FONT)
+    CURRENT_SONG_LABEL = ("current_song_label", _("Song: {current}/{total}"), GENERAL_FONT)
+    VOLUME_LABEL = ("volume_label", _("Volume: {volume}%"), GENERAL_FONT)
     
     @property
     def variable_name(self):
         return self.value[0]
 
     @property
-    def default_text(self):
+    def text(self):
         return self.value[1]
     
     @property

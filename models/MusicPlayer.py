@@ -22,6 +22,7 @@ class MusicPlayer:
         self.paused = False
         
         self.main_controller = MainController(root, self)
+        self.main_controller.update_statements_label()
         self.root.after(500, self.check_music_end)
 
     def fill_music_folders(self):
@@ -150,3 +151,13 @@ class MusicPlayer:
     def get_current_song_index(self): return self.current_song_index
     
     def get_volume(self): return mixer.music.get_volume()
+    
+    from translator import translator
+
+    #def change_language(self, new_language):
+        # Changer la langue dans le traducteur global
+     #   translator.set_language(new_language)
+
+        # Rafraîchir tous les textes
+      #  self.refresh_labels()
+       # self.update_statements_label()  # Mettre à jour les valeurs dynamiques

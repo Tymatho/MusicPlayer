@@ -1,11 +1,6 @@
-import gettext
 from enum import Enum
 import tkinter as tk
-
-locale_dir = "./locales"
-lang = "fr"
-translation = gettext.translation("app", localedir=locale_dir, languages=[lang], fallback=True)
-_ = translation.gettext
+from translator import _
 
 class MediaPlayerButtons(Enum):
     FOLDER_MUSIC_BUTTON = ("folder_music_button", _("Select Folder to Play"), "load_multiple_music", tk.NORMAL)

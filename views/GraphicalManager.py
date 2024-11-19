@@ -5,6 +5,7 @@ from models.Song import SongColumns
 from controller.binds import AppBinds
 from .graphical_components.buttons import MediaPlayerButtons
 from .graphical_components.labels import MediaPlayerLabels
+from config import PROJECT_ROOT
 
 class GraphicalManager:
     def __init__(self, root, controller: MainController):
@@ -21,7 +22,7 @@ class GraphicalManager:
         self.root.title("Music Player")
         self.root.geometry("800x400")
         try:
-            self.root.iconbitmap("./music_player.ico")
+            self.root.iconbitmap(f"{PROJECT_ROOT}/music_player.ico")
         except Exception:
             pass
 
@@ -67,7 +68,7 @@ class GraphicalManager:
         self.bottom_toolbar = tk.Frame(self.root)
         self.bottom_toolbar.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
         
-        self.statements_label = {label.variable_name: self.create_label(self.root, label.default_text, label.font) for label in MediaPlayerLabels}
+        self.statements_label = {label.variable_name: self.create_label(self.root, label.text, label.font) for label in MediaPlayerLabels}
         self.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)
         self.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].place(relx=0.0, rely=1.0, anchor="sw", x=10, y=-10)
 

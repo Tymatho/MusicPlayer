@@ -1,7 +1,5 @@
 import tkinter as tk
 from typing import List
-
-# Spécifie qu'on importe un énum
 from models.Song import SongColumns
 from views.GraphicalManager import GraphicalManager
 from views.graphical_components.buttons import MediaPlayerButtons
@@ -30,9 +28,19 @@ class MainController:
         return f"{int(minutes)}:{int(seconds):02d}"
     
     def update_statements_label(self):
-        self.graphics.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].config(text=f"Volume: {self.music_player.get_volume() * 100}%")
-        self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].config(text=f"Song: {self.music_player.get_current_song_index() + 1}/{len(self.music_player.get_mp3_files())}")
-
+        if self.music_player.get_current_song_index() < 0 or not self.music_player.get_mp3_files():
+            current_song_index = 0
+            total_songs = 0
+        else :
+            current_song_index = self.music_player.get_current_song_index() + 1
+            total_songs = len(self.music_player.get_mp3_files())
+        volume = int(self.music_player.get_volume() * 100)
+        self.graphics.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].config(
+        text=MediaPlayerLabels.VOLUME_LABEL.text.format(volume=volume)
+        )
+        self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].config(
+            text=MediaPlayerLabels.CURRENT_SONG_LABEL.text.format(current=current_song_index, total=total_songs)
+        )
     def set_button_state(self, buttons: List[tk.Button], state):
         for button in buttons:
             button.config(state=state)
