@@ -44,7 +44,7 @@ class GraphicalManager:
         self.tree = ttk.Treeview(frame, columns=song_columns, show="headings", height=5)
         for column in SongColumns:
             #command=lambda name=column.name -> store the value to apply it to EACH iteration and not with the last value of the iteration
-            self.tree.heading(column.name, text=column.name, command=lambda name=column.name: self.controller.sort_column(name))
+            self.tree.heading(column.name, text=column.translated_text, command=lambda name=column.name: self.controller.sort_column(name))
             self.tree.column(column.name, width=column.width, stretch=column.width)
 
         scrollbar = ttk.Scrollbar(frame, orient="vertical", command=self.tree.yview)

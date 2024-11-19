@@ -34,7 +34,7 @@ class MainController:
         else :
             current_song_index = self.music_player.get_current_song_index() + 1
             total_songs = len(self.music_player.get_mp3_files())
-        volume = int(self.music_player.get_volume() * 100)
+        volume = round(self.music_player.get_volume(),1) * 100
         self.graphics.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].config(
         text=MediaPlayerLabels.VOLUME_LABEL.text.format(volume=volume)
         )
@@ -130,22 +130,16 @@ class MainController:
             item = self.graphics.get_tree().selection()[0]
             self.toggle_enable(item)
 
-    def update_volume(self, event, volume: float):
-        self.music_player.update_volume(volume)
+    def update_volume(self, event, volume: float): self.music_player.update_volume(volume)
         
-    def play_this_music(self, event):
-        self.music_player.play_this_music()
+    def play_this_music(self, event): self.music_player.play_this_music()
         
-    def load_multiple_music(self, event):
-        self.music_player.load_multiple_music()
+    def load_multiple_music(self, event): self.music_player.load_multiple_music()
         
-    def load_one_music(self, event):
-        self.music_player.load_one_music()
+    def load_one_music(self, event): self.music_player.load_one_music()
         
-    def pause_music(self, event):
-        self.music_player.pause_music()
+    def pause_music(self, event): self.music_player.pause_music()
         
-    def resume_music(self, event):
-        self.music_player.resume_music()    
+    def resume_music(self, event): self.music_player.resume_music()    
     
     def get_tree(self): return self.graphics.get_tree()

@@ -23,6 +23,7 @@ class MusicPlayer:
         
         self.main_controller = MainController(root, self)
         self.main_controller.update_statements_label()
+        
         self.root.after(500, self.check_music_end)
 
     def fill_music_folders(self):
@@ -128,7 +129,7 @@ class MusicPlayer:
                 
     def update_volume(self, volume: float):
         if self.mp3_files:
-            new_volume = max(0.0, min(1.0, mixer.music.get_volume() + volume)) #get safe value for volume
+            new_volume = round(max(0.0, min(1.0, mixer.music.get_volume() + volume)), 1) #get safe value for volume
             mixer.music.set_volume(new_volume)
             self.main_controller.update_statements_label()
     

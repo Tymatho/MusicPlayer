@@ -8,8 +8,6 @@ You have to install these packages from pip :
 * pip install mutagen
 * pip install ttkthemes
 * pip install polib
-* pip install kivy
-* pip install buildozer
 
 ## Generate application
 
