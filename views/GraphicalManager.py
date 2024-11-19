@@ -5,7 +5,7 @@ from models.Song import SongColumns
 from controller.binds import AppBinds
 from .graphical_components.buttons import MediaPlayerButtons
 from .graphical_components.labels import MediaPlayerLabels
-from config import PROJECT_ROOT
+from utils.config import PROJECT_ROOT
 
 class GraphicalManager:
     def __init__(self, root, controller: MainController):
@@ -20,7 +20,7 @@ class GraphicalManager:
     
     def init_window(self):
         self.root.title("Music Player")
-        self.root.geometry("800x400")
+        self.root.geometry("1200x400")
         try:
             self.root.iconbitmap(f"{PROJECT_ROOT}/music_player.ico")
         except Exception:

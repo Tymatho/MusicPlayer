@@ -1,5 +1,5 @@
 from enum import Enum
-from translator import _
+from utils.translator import _
 
 GENERAL_FONT=("Helvetica", 12)
 

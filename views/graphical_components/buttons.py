@@ -1,6 +1,6 @@
 from enum import Enum
 import tkinter as tk
-from translator import _
+from utils.translator import _
 
 class MediaPlayerButtons(Enum):
     FOLDER_MUSIC_BUTTON = ("folder_music_button", _("Select Folder to Play"), "load_multiple_music", tk.NORMAL)

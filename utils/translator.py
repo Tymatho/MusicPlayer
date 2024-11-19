@@ -1,6 +1,6 @@
 import gettext
 from pathlib import Path
-from config import PROJECT_ROOT, DEFAULT_LANGUAGE
+from utils.config import PROJECT_ROOT, DEFAULT_LANGUAGE
 
 class Translate:
     def __init__(self, locale_dir: str, default_language: str = "en", domain: str = "app"):

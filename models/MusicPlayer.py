@@ -152,7 +152,7 @@ class MusicPlayer:
     
     def get_volume(self): return mixer.music.get_volume()
     
-    from translator import translator
+    from utils.translator import translator
 
     #def change_language(self, new_language):
         # Changer la langue dans le traducteur global

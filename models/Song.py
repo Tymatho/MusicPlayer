@@ -1,5 +1,5 @@
 from enum import Enum
-from translator import _
+from utils.translator import _
 
 class Song:
     def __init__(self, path: str, title: str, duration: float, enable: bool = True):
