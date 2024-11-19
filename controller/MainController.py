@@ -134,4 +134,10 @@ class MainController:
     def load_one_music(self, event):
         self.music_player.load_one_music()
         
+    def pause_music(self, event):
+        self.music_player.pause_music()
+        
+    def resume_music(self, event):
+        self.music_player.resume_music()    
+    
     def get_tree(self): return self.graphics.get_tree()

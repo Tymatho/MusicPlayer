@@ -1,0 +1,26 @@
+msgid "Select Folder to Play"
+msgstr "Select Folder to Play"
+
+msgid "Select Music File"
+msgstr "Select Music File"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Resume"
+msgstr "Resume"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "Play This Music"
+msgstr "Play This Music"
+
+msgid "Increase Volume"
+msgstr "Increase Volume"
+
+msgid "Decrease Volume"
+msgstr "Decrease Volume"

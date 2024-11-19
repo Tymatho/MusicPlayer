@@ -106,14 +106,16 @@ class MusicPlayer:
             self.play_music()
 
     def pause_music(self):
-        mixer.music.pause()
-        self.set_paused_state(True)
-        self.main_controller.update_buttons()
+        if self.mp3_files and not self.paused:
+            mixer.music.pause()
+            self.set_paused_state(True)
+            self.main_controller.update_buttons()
 
     def resume_music(self):
-        mixer.music.unpause()
-        self.set_paused_state(False)
-        self.main_controller.update_buttons()
+        if self.mp3_files and self.paused:
+            mixer.music.unpause()
+            self.set_paused_state(False)
+            self.main_controller.update_buttons()
 
     def play_this_music(self):
         selected_item = self.main_controller.get_tree().selection()
