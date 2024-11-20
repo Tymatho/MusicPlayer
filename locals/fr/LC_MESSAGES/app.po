@@ -3,47 +3,62 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: fr\n"
 
+#: views/graphical_components/buttons.py:6
 msgid "Select Folder to Play"
 msgstr "Sélectionner un dossier"
 
+#: views/graphical_components/buttons.py:7
 msgid "Select Music File"
 msgstr "Sélectionner une musique"
 
+#: views/graphical_components/buttons.py:8
 msgid "Pause"
 msgstr "Pause"
 
+#: views/graphical_components/buttons.py:9
 msgid "Resume"
 msgstr "Reprendre"
 
+#: views/graphical_components/buttons.py:10
 msgid "Next"
 msgstr "Suivant"
 
+#: views/graphical_components/buttons.py:11
 msgid "Previous"
 msgstr "Précédent"
 
+#: views/graphical_components/buttons.py:12
 msgid "Play This Music"
 msgstr "Jouer cette musique"
 
+#: views/graphical_components/buttons.py:13
 msgid "Increase Volume"
 msgstr "Augmenter le volume"
 
+#: views/graphical_components/buttons.py:14
 msgid "Decrease Volume"
 msgstr "Diminuer le volume"
 
+#: views/graphical_components/labels.py:7
 msgid "Song: {current}/{total}"
 msgstr "Musique : {current}/{total}"
 
+#: views/graphical_components/labels.py:8
 msgid "Volume: {volume}%"
 msgstr "Volume : {volume}%"
 
+#: models/Song.py:22
 msgid "Title"
 msgstr "Titre"
 
+#: models/Song.py:23
 msgid "Path"
 msgstr "Chemin"
 
+#: models/Song.py:24
 msgid "Duration"
 msgstr "Durée"
 
+#: models/Song.py:25
 msgid "Enable"
 msgstr "Disponible"

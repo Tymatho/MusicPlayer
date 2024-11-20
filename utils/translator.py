@@ -21,6 +21,7 @@ class Translate:
     def set_language(self, language: str):
         self.translation = self.load_translation(language)
         self._ = self.translation.gettext
+        DEFAULT_LANGUAGE = language
 
     def gettext(self, message: str):
         return self._(message)
