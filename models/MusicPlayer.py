@@ -1,4 +1,5 @@
 import os
+from watchdog.observers import Observer
 #Spécifie qu'on importe une classe
 from models.Song import Song
 from controller.MainController import MainController
@@ -6,6 +7,7 @@ from controller.MainController import MainController
 from tkinter import filedialog
 from pygame import mixer
 from mutagen.mp3 import MP3
+from models.DirectoryListener import DirectoryListener
 
 class MusicPlayer:
     def __init__(self, root):
@@ -24,6 +26,9 @@ class MusicPlayer:
         self.main_controller = MainController(root, self)
         self.main_controller.update_statements_label()
         
+        self.event_handler = DirectoryListener(self)
+        self.observer = Observer()
+               
         self.root.after(500, self.check_music_end)
 
     def fill_music_folders(self):
@@ -38,9 +43,8 @@ class MusicPlayer:
                         if os.path.isdir(full_path):
                             stack.append(full_path)
                         elif file.endswith(".mp3"):
-                            if file not in self.music_files_set:
-                                self.mp3_files.append(Song(full_path, file, MP3(full_path).info.length))
-                                self.music_files_set.add(file)
+                            song = Song(full_path, file, MP3(full_path).info.length)
+                            self.add_song(song)
                 except PermissionError:
                     continue
             self.main_controller.update_song_table()
@@ -50,9 +54,10 @@ class MusicPlayer:
             for file in os.listdir(self.current_folder):
                 full_path = os.path.join(self.current_folder, file)
                 if file.endswith(".mp3"):
-                    if file not in self.music_files_set:
-                        self.mp3_files.append(Song(full_path, file, MP3(full_path).info.length))
-                        self.music_files_set.add(file)
+                    song = Song(full_path, file, MP3(full_path).info.length)
+                    self.add_song(song)
+            self.observer.schedule(self.event_handler, self.current_folder, recursive=False)  # Set recursive=True to watch subdirectories
+            self.observer.start()
             self.main_controller.update_song_table()
 
     def load_music(self, song: Song):
@@ -132,6 +137,7 @@ class MusicPlayer:
             new_volume = round(max(0.0, min(1.0, mixer.music.get_volume() + volume)), 1) #get safe value for volume
             mixer.music.set_volume(new_volume)
             self.main_controller.update_statements_label()
+            self.main_controller.update_buttons()
     
     def check_music_end(self):
         if self.mp3_files:
@@ -152,3 +158,27 @@ class MusicPlayer:
     def get_current_song_index(self): return self.current_song_index
     
     def get_volume(self): return mixer.music.get_volume()
+    
+    def add_song(self, song: Song) :
+        if song.get_path() not in self.music_files_set:
+            self.mp3_files.append(song)
+            self.music_files_set.add(song.get_path())
+            
+    def add_song_with_file_path(self, song_path: str) :
+        if song_path not in self.music_files_set:
+            song = Song(song_path, os.path.basename(song_path), MP3(song_path).info.length)
+            self.mp3_files.append(song)
+            self.music_files_set.add(song.get_path())
+            self.main_controller.update_song_table()
+            
+    def remove_song(self, song: Song):
+        if song.get_path() in self.music_files_set:
+            self.mp3_files.remove(song)
+            self.music_files_set.remove(song.get_path())
+            
+    def remove_song_with_file_path(self, song_path: str):
+        if song_path in self.music_files_set:
+            song_to_remove = next((song for song in self.mp3_files if song.path == song_path), None)
+            self.mp3_files.remove(song_to_remove)
+            self.music_files_set.remove(song_to_remove.get_path())
+            self.main_controller.update_song_table()

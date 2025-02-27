@@ -52,18 +52,12 @@ class MainController:
             self.set_button_state([buttons[button.variable_name] for button in buttons_to_update], state)
 
         if self.music_player.get_paused_state():
-            set_buttons_state(
-                [MediaPlayerButtons.PAUSE_BUTTON],
-                tk.DISABLED
-            )
+            set_buttons_state([MediaPlayerButtons.PAUSE_BUTTON], tk.DISABLED)
             set_buttons_state([MediaPlayerButtons.RESUME_BUTTON], tk.NORMAL)
         else:
             set_buttons_state([MediaPlayerButtons.RESUME_BUTTON], tk.DISABLED)
-            set_buttons_state(
-                [MediaPlayerButtons.PAUSE_BUTTON],
-                tk.NORMAL
-            )
-
+            set_buttons_state([MediaPlayerButtons.PAUSE_BUTTON], tk.NORMAL)
+            
         if self.music_player.get_is_multi_music_played():
             set_buttons_state(
                 [MediaPlayerButtons.NEXT_BUTTON, MediaPlayerButtons.PREVIOUS_BUTTON,
@@ -76,6 +70,14 @@ class MainController:
                 MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON],
                 tk.DISABLED
             )
+            
+        if self.music_player.get_volume() < 0.1:
+            set_buttons_state([MediaPlayerButtons.INCREASE_VOLUME_BUTTON], tk.NORMAL)
+            set_buttons_state([MediaPlayerButtons.DECREASE_VOLUME_BUTTON], tk.DISABLED)
+        if self.music_player.get_volume() > 0.9 :
+            set_buttons_state([MediaPlayerButtons.INCREASE_VOLUME_BUTTON], tk.DISABLED)
+            set_buttons_state([MediaPlayerButtons.DECREASE_VOLUME_BUTTON], tk.NORMAL)
+            
 
     def sort_column(self, col_name: str):
         reverse = self.sort_direction.get(col_name, False)

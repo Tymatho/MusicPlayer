@@ -53,13 +53,16 @@ class GraphicalManager:
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
+        self.create_bindings()
+        
+    def create_bindings(self):
         for binding in AppBinds:
             match binding.parent:
                 case "treeview":
                     self.tree.bind(binding.control, binding.command(self.controller))
                 case "root":
                     self.root.bind(binding.control, binding.command(self.controller))
-        
+                    
     def create_contextual_menu(self):
         self.context_menu = tk.Menu(self.root, tearoff=0)
         self.context_menu.add_command(label="Toggle Enable", command=self.controller.toggle_enable_contextual_menu)
