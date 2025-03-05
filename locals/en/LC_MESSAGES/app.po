@@ -47,6 +47,10 @@ msgstr "Song: {current}/{total}"
 msgid "Volume: {volume}%"
 msgstr "Volume : {volume}%"
 
+#: views/graphical_components/labels.py:9
+msgid "{current_time} / {total_time}"
+msgstr "{current_time} / {total_time}"
+
 #: models/Song.py:22
 msgid "Title"
 msgstr "Title"

@@ -23,7 +23,7 @@ class MainController:
             self.graphics.get_tree().insert("", tk.END, values=(song.get_title(), song.get_path(), self.format_duration(song.get_duration()), song.get_enable()))
         self.highlight_current_song()
 
-    def format_duration(self, duration):
+    def format_duration(self, duration:int):
         minutes, seconds = divmod(duration, 60)
         return f"{int(minutes)}:{int(seconds):02d}"
     
@@ -41,6 +41,14 @@ class MainController:
         self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].config(
             text=MediaPlayerLabels.CURRENT_SONG_LABEL.text.format(current=current_song_index, total=total_songs)
         )
+        
+    def update_current_song_time(self, current_music_time=0, total_music_time=0):
+        current_music_time = self.format_duration(current_music_time)
+        total_music_time = self.format_duration(total_music_time)
+        self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_TIME.variable_name].config(
+            text=MediaPlayerLabels.CURRENT_SONG_TIME.text.format(current_time=current_music_time, total_time=total_music_time)
+        )
+        
     def set_button_state(self, buttons: List[tk.Button], state):
         for button in buttons:
             button.config(state=state)

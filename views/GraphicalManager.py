@@ -74,6 +74,7 @@ class GraphicalManager:
         self.statements_label = {label.variable_name: self.create_label(self.root, label.text, label.font) for label in MediaPlayerLabels}
         self.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)
         self.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].place(relx=0.0, rely=1.0, anchor="sw", x=10, y=-10)
+        self.statements_label[MediaPlayerLabels.CURRENT_SONG_TIME.variable_name].place(relx=0.5, rely=1.0, anchor="s", x=0, y=-10)
 
     def create_label(self, parent, text, font):
         label = tk.Label(parent, text=text, font=font)

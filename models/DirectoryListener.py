@@ -8,12 +8,15 @@ class DirectoryListener(FileSystemEventHandler):
         self.music_player = music_player
     
     def on_created(self, event):
-        if not event.is_directory:  # Check if it's not a directory
+        if self.__check_if_file_is_music(event):
             print(f"File created: {event.src_path}")
             self.music_player.add_song_with_file_path(event.src_path)
             
 
     def on_deleted(self, event):
-        if not event.is_directory:  # Check if it's not a directory
+        if self.__check_if_file_is_music(event):
             print(f"File deleted: {event.src_path}")
             self.music_player.remove_song_with_file_path(event.src_path)
+            
+    def __check_if_file_is_music(self, event):
+        return (not event.is_directory) and (event.src_path.endswith("mp3"))

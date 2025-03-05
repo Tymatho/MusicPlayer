@@ -1,4 +1,7 @@
 import os
+import time
+import threading
+
 from watchdog.observers import Observer
 #Spécifie qu'on importe une classe
 from models.Song import Song
@@ -25,6 +28,7 @@ class MusicPlayer:
         
         self.main_controller = MainController(root, self)
         self.main_controller.update_statements_label()
+        self.main_controller.update_current_song_time()
         
         self.event_handler = DirectoryListener(self)
         self.observer = Observer()
@@ -141,6 +145,8 @@ class MusicPlayer:
     
     def check_music_end(self):
         if self.mp3_files:
+            if mixer.music.get_busy() and not self.paused:
+                self.main_controller.update_current_song_time(mixer.music.get_pos() / 1000, self.get_mp3_files()[self.get_current_song_index()].get_duration())
             if not mixer.music.get_busy() and not self.paused:
                 self.play_next_music()
         self.root.after(500, self.check_music_end)
@@ -165,8 +171,9 @@ class MusicPlayer:
             self.music_files_set.add(song.get_path())
             
     def add_song_with_file_path(self, song_path: str) :
-        if song_path not in self.music_files_set:
-            song = Song(song_path, os.path.basename(song_path), MP3(song_path).info.length)
+        if song_path not in self.music_files_set and song_path.endswith("mp3"):
+            time.sleep(0.5)   #File previously created so wait for the previous process to release the song
+            song = Song(song_path, os.path.basename(song_path), MP3(song_path).info.length, True)
             self.mp3_files.append(song)
             self.music_files_set.add(song.get_path())
             self.main_controller.update_song_table()
