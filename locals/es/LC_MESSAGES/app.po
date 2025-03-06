@@ -39,17 +39,21 @@ msgstr "Subir el volumen"
 msgid "Decrease Volume"
 msgstr "Bajar el volumen"
 
-#: views/graphical_components/labels.py:7
+#: views/graphical_components/bottom_labels.py:7
 msgid "Song: {current}/{total}"
 msgstr "Música : {current}/{total}"
 
-#: views/graphical_components/labels.py:8
+#: views/graphical_components/bottom_labels.py:8
 msgid "Volume: {volume}%"
 msgstr "Volumen : {volume}%"
 
-#: views/graphical_components/labels.py:9
+#: views/graphical_components/bottom_labels.py:9
 msgid "{current_time} / {total_time}"
 msgstr "{current_time} / {total_time}"
+
+#: views/graphical_components/contextual_labels.py:6
+msgid "Toggle Enable"
+msgstr "Alternar la disponibilidad"
 
 #: models/Song.py:22
 msgid "Title"

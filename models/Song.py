@@ -33,7 +33,7 @@ class SongColumns(Enum):
         return self.value[1]
 
     @property
-    def translated_text(self):
+    def text(self):
         return self.value[2]
     
     @property

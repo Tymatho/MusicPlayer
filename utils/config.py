@@ -25,3 +25,8 @@ DEFAULT_LANGUAGE = current_locale.split('_')[0]
 # next(langue.language_name for langue in Languages if langue.language_code == DEFAULT_LANGUAGE)
 
 CURRENT_PLATFORM = platform.system()
+
+WINDOW_WIDTH = 1400
+WINDOW_HEIGHT = 500
+
+GENERAL_FONT=("Helvetica", 12)

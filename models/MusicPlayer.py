@@ -21,9 +21,8 @@ class MusicPlayer:
         self.current_folder = None
         self.current_song_index = -1
         self.mp3_files = []
-        #set est un tableau qui ne permet pas les doublons
+        #store only the song name. Example : "XXXX.mp3"
         self.music_files_set = set()
-        self.is_multi_music_played = False
         self.paused = False
         
         self.main_controller = MainController(root, self)
@@ -72,7 +71,6 @@ class MusicPlayer:
         self.current_folder = filedialog.askdirectory()
         if self.current_folder:
             self.fill_music_folder()
-            self.is_multi_music_played = True
             self.reset_current_song_index()
             self.play_music()
 
@@ -82,7 +80,6 @@ class MusicPlayer:
             self.music_files_set.clear()
             self.mp3_files = [Song(temp_song, os.path.basename(temp_song), MP3(temp_song).info.length, True)]
             self.reset_current_song_index()
-            self.is_multi_music_played = False
             self.music_files_set.add(os.path.basename(temp_song))
             self.main_controller.update_song_table()
             self.play_music()
@@ -99,7 +96,7 @@ class MusicPlayer:
     def get_valid_song_index(self, index, step):
         if len(self.mp3_files) == 0:
             return -1
-        new_index = (index + step) % len(self.mp3_files)
+        new_index = (index + step) % len(self.mp3_files) #use of modulo to be in cycle of the len of the array
         while not self.mp3_files[new_index].get_enable():
             new_index = (new_index + step) % len(self.mp3_files)
             if new_index == index:
@@ -150,21 +147,7 @@ class MusicPlayer:
             if not mixer.music.get_busy() and not self.paused:
                 self.play_next_music()
         self.root.after(500, self.check_music_end)
-
-    def set_paused_state(self, new_state: bool): self.paused = new_state
         
-    def get_mp3_files(self): return self.mp3_files
-    
-    def get_paused_state(self): return self.paused
-    
-    def get_is_multi_music_played(self): return self.is_multi_music_played
-    
-    def reset_current_song_index(self): self.current_song_index = 0
-        
-    def get_current_song_index(self): return self.current_song_index
-    
-    def get_volume(self): return mixer.music.get_volume()
-    
     def add_song(self, song: Song) :
         if song.get_path() not in self.music_files_set:
             self.mp3_files.append(song)
@@ -189,3 +172,19 @@ class MusicPlayer:
             self.mp3_files.remove(song_to_remove)
             self.music_files_set.remove(song_to_remove.get_path())
             self.main_controller.update_song_table()
+
+    def set_paused_state(self, new_state: bool): self.paused = new_state
+        
+    def get_mp3_files(self): return self.mp3_files
+    
+    def get_paused_state(self): return self.paused
+    
+    def get_is_multi_music_played(self): return self.mp3_files and len(self.mp3_files) > 1
+    
+    def reset_current_song_index(self): self.current_song_index = 0
+        
+    def get_current_song_index(self): return self.current_song_index
+    
+    def get_volume(self): return mixer.music.get_volume()
+    
+    def get_controller(self): return self.main_controller

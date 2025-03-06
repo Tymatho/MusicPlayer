@@ -3,7 +3,7 @@ from typing import List
 from models.Song import SongColumns
 from views.GraphicalManager import GraphicalManager
 from views.graphical_components.buttons import MediaPlayerButtons
-from views.graphical_components.labels import MediaPlayerLabels
+from views.graphical_components.bottom_labels import MediaPlayerBottomLabels
 from models import MusicPlayer
 
 class MainController:
@@ -35,19 +35,16 @@ class MainController:
             current_song_index = self.music_player.get_current_song_index() + 1
             total_songs = len(self.music_player.get_mp3_files())
         volume = round(self.music_player.get_volume(),1) * 100
-        self.graphics.statements_label[MediaPlayerLabels.VOLUME_LABEL.variable_name].config(
-        text=MediaPlayerLabels.VOLUME_LABEL.text.format(volume=volume)
-        )
-        self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_LABEL.variable_name].config(
-            text=MediaPlayerLabels.CURRENT_SONG_LABEL.text.format(current=current_song_index, total=total_songs)
-        )
+        self.graphics.bottom_labels[MediaPlayerBottomLabels.VOLUME_LABEL.variable_name].config(
+        text=MediaPlayerBottomLabels.VOLUME_LABEL.text.format(volume=volume))
+        self.graphics.bottom_labels[MediaPlayerBottomLabels.CURRENT_SONG_LABEL.variable_name].config(
+            text=MediaPlayerBottomLabels.CURRENT_SONG_LABEL.text.format(current=current_song_index, total=total_songs))
         
     def update_current_song_time(self, current_music_time=0, total_music_time=0):
         current_music_time = self.format_duration(current_music_time)
         total_music_time = self.format_duration(total_music_time)
-        self.graphics.statements_label[MediaPlayerLabels.CURRENT_SONG_TIME.variable_name].config(
-            text=MediaPlayerLabels.CURRENT_SONG_TIME.text.format(current_time=current_music_time, total_time=total_music_time)
-        )
+        self.graphics.bottom_labels[MediaPlayerBottomLabels.CURRENT_SONG_TIME.variable_name].config(
+            text=MediaPlayerBottomLabels.CURRENT_SONG_TIME.text.format(current_time=current_music_time, total_time=total_music_time))
         
     def set_button_state(self, buttons: List[tk.Button], state):
         for button in buttons:
@@ -70,22 +67,22 @@ class MainController:
             set_buttons_state(
                 [MediaPlayerButtons.NEXT_BUTTON, MediaPlayerButtons.PREVIOUS_BUTTON,
                 MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON],
-                tk.NORMAL
-            )
+                tk.NORMAL)
         else:
             set_buttons_state(
                 [MediaPlayerButtons.NEXT_BUTTON, MediaPlayerButtons.PREVIOUS_BUTTON, 
                 MediaPlayerButtons.PLAY_THIS_MUSIC_BUTTON],
-                tk.DISABLED
-            )
+                tk.DISABLED)
             
         if self.music_player.get_volume() < 0.1:
             set_buttons_state([MediaPlayerButtons.INCREASE_VOLUME_BUTTON], tk.NORMAL)
             set_buttons_state([MediaPlayerButtons.DECREASE_VOLUME_BUTTON], tk.DISABLED)
-        if self.music_player.get_volume() > 0.9 :
+        elif self.music_player.get_volume() > 0.9 :
             set_buttons_state([MediaPlayerButtons.INCREASE_VOLUME_BUTTON], tk.DISABLED)
             set_buttons_state([MediaPlayerButtons.DECREASE_VOLUME_BUTTON], tk.NORMAL)
-            
+        else:
+            set_buttons_state([MediaPlayerButtons.INCREASE_VOLUME_BUTTON], tk.NORMAL)
+            set_buttons_state([MediaPlayerButtons.DECREASE_VOLUME_BUTTON], tk.NORMAL)
 
     def sort_column(self, col_name: str):
         reverse = self.sort_direction.get(col_name, False)
@@ -93,8 +90,7 @@ class MainController:
             return
         self.music_player.get_mp3_files().sort(
             key=lambda song: getattr(song, f"get_{col_name.lower()}")(),
-            reverse=reverse
-        )
+            reverse=reverse)
         self.update_song_table()
         self.last_sorted_column = col_name
         self.last_sort_reverse = reverse
