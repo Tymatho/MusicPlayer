@@ -13,7 +13,7 @@ class GraphicalManager:
         self.root = root
         self.init_window()
         self.controller = controller
-        root.set_theme("black")
+        self.root.set_theme("black")
         self.create_top_buttons()
         self.create_song_table()
         self.create_contextual_menu()

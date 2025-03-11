@@ -1,8 +1,6 @@
 import os
 import time
-import threading
 
-from watchdog.observers import Observer
 #Spécifie qu'on importe une classe
 from models.Song import Song
 from controller.MainController import MainController
@@ -10,7 +8,6 @@ from controller.MainController import MainController
 from tkinter import filedialog
 from pygame import mixer
 from mutagen.mp3 import MP3
-from models.DirectoryListener import DirectoryListener
 
 class MusicPlayer:
     def __init__(self, root):
@@ -28,12 +25,10 @@ class MusicPlayer:
         self.main_controller = MainController(root, self)
         self.main_controller.update_statements_label()
         self.main_controller.update_current_song_time()
-        
-        self.event_handler = DirectoryListener(self)
-        self.observer = Observer()
                
         self.root.after(500, self.check_music_end)
 
+    #Useless method but useful to learn how to use a stack
     def fill_music_folders(self):
         if self.current_folder:
             stack = [self.current_folder]
@@ -59,8 +54,6 @@ class MusicPlayer:
                 if file.endswith(".mp3"):
                     song = Song(full_path, file, MP3(full_path).info.length)
                     self.add_song(song)
-            self.observer.schedule(self.event_handler, self.current_folder, recursive=False)  # Set recursive=True to watch subdirectories
-            self.observer.start()
             self.main_controller.update_song_table()
 
     def load_music(self, song: Song):
@@ -70,6 +63,7 @@ class MusicPlayer:
     def load_multiple_music(self):
         self.current_folder = filedialog.askdirectory()
         if self.current_folder:
+            self.__reset_music_folder()
             self.fill_music_folder()
             self.reset_current_song_index()
             self.play_music()
@@ -77,7 +71,7 @@ class MusicPlayer:
     def load_one_music(self):
         temp_song = filedialog.askopenfilename(filetypes=[("Music Files", "*.mp3")])
         if temp_song:
-            self.music_files_set.clear()
+            self.__reset_music_folder()
             self.mp3_files = [Song(temp_song, os.path.basename(temp_song), MP3(temp_song).info.length, True)]
             self.reset_current_song_index()
             self.music_files_set.add(os.path.basename(temp_song))
@@ -188,3 +182,9 @@ class MusicPlayer:
     def get_volume(self): return mixer.music.get_volume()
     
     def get_controller(self): return self.main_controller
+    
+    def __reset_music_folder(self):
+        if self.mp3_files and self.music_files_set:
+            self.music_files_set.clear()
+            self.mp3_files.clear()
+        self.reset_current_song_index()
