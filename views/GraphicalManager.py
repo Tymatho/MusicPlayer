@@ -61,10 +61,8 @@ class GraphicalManager:
             match binding.parent:
                 case "treeview":
                     self.tree.bind(binding.control, binding.command(self.controller))
-                    break
                 case "root":
                     self.root.bind(binding.control, binding.command(self.controller))
-                    break
                     
     def create_contextual_menu(self):
         self.context_menu = tk.Menu(self.root, tearoff=0)
