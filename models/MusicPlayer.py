@@ -136,10 +136,11 @@ class MusicPlayer:
     
     def check_music_end(self):
         if self.mp3_files:
-            if mixer.music.get_busy() and not self.paused:
-                self.main_controller.update_current_song_time(mixer.music.get_pos() / 1000, self.get_mp3_files()[self.get_current_song_index()].get_duration())
-            if not mixer.music.get_busy() and not self.paused:
-                self.play_next_music()
+            if not self.paused:
+                if mixer.music.get_busy():
+                    self.main_controller.update_current_song_time(mixer.music.get_pos() / 1000, self.get_mp3_files()[self.get_current_song_index()].get_duration())
+                else:
+                    self.play_next_music()
         self.root.after(500, self.check_music_end)
         
     def add_song(self, song: Song) :
